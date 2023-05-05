@@ -23,39 +23,42 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-// Cấu hình và định nghĩa các quyền và quy trình xác thực cho ứng dụng
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+//cấu hình và định nghĩa các quyền và quy trình xác thực cho ứng dụng.
+public class  SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-
-
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
-    public AuthenticationManager authenticationManager() throws Exception{
+    public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
 
     @Bean
-    public RestAuthenticationEntryPoint restServicesEntryPoint(){
+    public RestAuthenticationEntryPoint restServicesEntryPoint() {
         return new RestAuthenticationEntryPoint();
     }
+
     @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler(){
+    public CustomAccessDeniedHandler customAccessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
 
 
+    //  mã hóa mật khẩu người dùng trước khi lưu trữ vào cơ sở dữ liệu.
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
+
+    //    Cấu hình xác thực và phân quyền người dùng.
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
@@ -66,8 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
         http.authorizeRequests()
-                .antMatchers("/","/login","/register").permitAll()
-                .antMatchers("/api/**").hasRole("USER")
+                .antMatchers("/", "/login","/api/movies/showing","/api/movies/showing/search","/register","/api/movies/details").permitAll()
+                .antMatchers("/api/**").hasRole("CLIENT")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -76,6 +79,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
     }
-
-
 }
+

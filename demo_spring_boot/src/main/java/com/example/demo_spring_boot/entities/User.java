@@ -1,12 +1,16 @@
 package com.example.demo_spring_boot.entities;
 
-import jakarta.persistence.*;
-import lombok.Data;
 
+import lombok.Data;
+import org.hibernate.annotations.Entity;
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Data
+@Table(name = "userr")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

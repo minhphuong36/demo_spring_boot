@@ -1,11 +1,12 @@
 package com.example.demo_spring_boot.security.configurer;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 // Xử lý các yêu cầu bị từ chối đăng nhập
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
